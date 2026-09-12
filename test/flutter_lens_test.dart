@@ -2,8 +2,8 @@ import 'package:flutter_lens/flutter_lens.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('records a completed network transaction', () {
-    FlutterLens.initialize();
+  test('records a completed network transaction', () async {
+    await FlutterLens.initialize(storage: _MemoryStorage());
     FlutterLens.clear();
 
     FlutterLens.record(
@@ -21,4 +21,17 @@ void main() {
 
     expect(FlutterLens.transactions.single.statusCode, 200);
   });
+}
+
+final class _MemoryStorage implements NetworkStorage {
+  List<NetworkTransaction> transactions = [];
+
+  @override
+  Future<void> clear() async => transactions = [];
+
+  @override
+  Future<List<NetworkTransaction>> readAll() async => transactions;
+
+  @override
+  Future<void> writeAll(List<NetworkTransaction> value) async => transactions = value;
 }

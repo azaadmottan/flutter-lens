@@ -2,6 +2,8 @@ import 'dart:async';
 
 import '../models/network_transaction.dart';
 import 'flutter_lens_config.dart';
+import '../storage/local_network_storage.dart';
+import '../storage/network_storage.dart';
 
 /// Entry point and in-memory transaction registry for FlutterLens.
 ///
@@ -15,23 +17,36 @@ final class FlutterLens {
   static final List<NetworkTransaction> _transactions = [];
   static final StreamController<List<NetworkTransaction>> _changes =
       StreamController<List<NetworkTransaction>>.broadcast();
+  static NetworkStorage? _storage;
 
   /// Initializes the in-memory capture layer.
   ///
   /// Calling this again replaces the configuration and trims existing history
   /// if the maximum transaction count was reduced.
-  static void initialize({
+  static Future<void> initialize({
     bool enabled = true,
     int maxTransactions = 200,
     String? environment,
-  }) {
+    NetworkStorage? storage,
+  }) async {
     _config = FlutterLensConfig(
       enabled: enabled,
       maxTransactions: maxTransactions,
       environment: environment,
     );
-    _trimToLimit();
-    _emit();
+    _storage = storage ?? LocalNetworkStorage();
+
+    try {
+      final restored = await _storage!.readAll();
+      _transactions
+        ..clear()
+        ..addAll(restored);
+      _trimToLimit();
+      _emit();
+      unawaited(_persist());
+    } catch (_) {
+      // Persistence failures must not block the host application.
+    }
   }
 
   /// Current FlutterLens configuration.
@@ -57,6 +72,7 @@ final class FlutterLens {
       _transactions.insert(0, transaction);
       _trimToLimit();
       _emit();
+      unawaited(_persist());
     } catch (_) {
       // FlutterLens is observational and must stay invisible to the host app.
     }
@@ -66,6 +82,10 @@ final class FlutterLens {
   static void clear() {
     _transactions.clear();
     _emit();
+    final storage = _storage;
+    if (storage != null) {
+      unawaited(_clearPersistedHistory(storage));
+    }
   }
 
   static void _trimToLimit() {
@@ -77,6 +97,26 @@ final class FlutterLens {
   static void _emit() {
     if (!_changes.isClosed) {
       _changes.add(transactions);
+    }
+  }
+
+  static Future<void> _persist() async {
+    final storage = _storage;
+    if (storage == null) {
+      return;
+    }
+    try {
+      await storage.writeAll(transactions);
+    } catch (_) {
+      // Persistence failures must not break request interception.
+    }
+  }
+
+  static Future<void> _clearPersistedHistory(NetworkStorage storage) async {
+    try {
+      await storage.clear();
+    } catch (_) {
+      // Persistence failures must not break request interception.
     }
   }
 }

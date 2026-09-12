@@ -312,7 +312,7 @@ The consuming application should have a simple integration API.
 Example:
 
 ```dart
-FlutterLens.initialize(
+await FlutterLens.initialize(
   enabled: true,
 );
 ```
@@ -631,7 +631,7 @@ Implement a configurable maximum number of stored transactions.
 Example:
 
 ```dart
-FlutterLens.initialize(
+await FlutterLens.initialize(
   maxTransactions: 200,
 );
 ```
@@ -746,7 +746,7 @@ FlutterLens must be usable in a tester/release build.
 Example:
 
 ```dart
-FlutterLens.initialize(
+await FlutterLens.initialize(
   enabled: true,
 );
 ```
@@ -804,7 +804,7 @@ The consuming application should be able to provide custom environment informati
 Example:
 
 ```dart
-FlutterLens.initialize(
+await FlutterLens.initialize(
   environment: 'staging',
 );
 ```
