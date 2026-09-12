@@ -551,7 +551,20 @@ access_token: ********
 
 Do not accidentally expose credentials through the inspector or sharing feature.
 
-The masking system should be configurable.
+FlutterLens masks values before they are kept in memory or written to local
+storage. This protection therefore also applies to the inspector and future
+copy/share utilities. The defaults cover the header names `Authorization`,
+`Cookie`, `Set-Cookie`, and `Proxy-Authorization`, along with the body fields
+`access_token`, `refresh_token`, and `password` (case-insensitive).
+
+Add application-specific sensitive names during initialization:
+
+```dart
+await FlutterLens.initialize(
+  sensitiveHeaderNames: {'X-API-Key'},
+  sensitiveBodyFieldNames: {'pin', 'sessionSecret'},
+);
+```
 
 ---
 

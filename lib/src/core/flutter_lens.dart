@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../inspector/flutter_lens_inspector.dart';
 import '../models/network_transaction.dart';
+import '../privacy/network_data_masker.dart';
 import 'flutter_lens_config.dart';
 import '../storage/local_network_storage.dart';
 import '../storage/network_storage.dart';
@@ -16,7 +17,7 @@ import '../storage/network_storage.dart';
 final class FlutterLens {
   FlutterLens._();
 
-  static FlutterLensConfig _config = const FlutterLensConfig();
+  static FlutterLensConfig _config = FlutterLensConfig();
   static final List<NetworkTransaction> _transactions = [];
   static final StreamController<List<NetworkTransaction>> _changes =
       StreamController<List<NetworkTransaction>>.broadcast();
@@ -30,12 +31,16 @@ final class FlutterLens {
     bool enabled = true,
     int maxTransactions = 200,
     String? environment,
+    Set<String>? sensitiveHeaderNames,
+    Set<String>? sensitiveBodyFieldNames,
     NetworkStorage? storage,
   }) async {
     _config = FlutterLensConfig(
       enabled: enabled,
       maxTransactions: maxTransactions,
       environment: environment,
+      sensitiveHeaderNames: sensitiveHeaderNames,
+      sensitiveBodyFieldNames: sensitiveBodyFieldNames,
     );
     _storage = storage ?? LocalNetworkStorage();
 
@@ -72,7 +77,7 @@ final class FlutterLens {
     }
 
     try {
-      _transactions.insert(0, transaction);
+      _transactions.insert(0, NetworkDataMasker.mask(transaction, _config));
       _trimToLimit();
       _emit();
       unawaited(_persist());
