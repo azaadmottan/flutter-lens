@@ -1,0 +1,21 @@
+# Dart and Flutter tool state
+.dart_tool/
+.packages
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# Generated build output
+build/
+coverage/
+
+# Package resolution lockfile (libraries should not commit this)
+pubspec.lock
+
+# IDE and editor settings
+.idea/
+.vscode/
+*.iml
+
+# Platform-generated files
+.DS_Store
+Thumbs.db
