@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+
+import '../inspector/flutter_lens_inspector.dart';
 import '../models/network_transaction.dart';
 import 'flutter_lens_config.dart';
 import '../storage/local_network_storage.dart';
@@ -87,6 +90,14 @@ final class FlutterLens {
       unawaited(_clearPersistedHistory(storage));
     }
   }
+
+  /// Opens FlutterLens' in-app network inspector.
+  static Future<void> openInspector(BuildContext context) =>
+      Navigator.of(context).push<void>(
+        MaterialPageRoute<void>(
+          builder: (_) => const FlutterLensInspector(),
+        ),
+      );
 
   static void _trimToLimit() {
     if (_transactions.length > _config.maxTransactions) {
