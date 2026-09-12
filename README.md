@@ -904,55 +904,7 @@ If practical, configurable body-size limits can be introduced.
 
 ---
 
-# 32. Testing Requirements
-
-Before considering V1 complete, create tests for:
-
-### Interceptor
-
-- Successful GET
-- Successful POST
-- Failed request
-- Timeout
-- Network error
-- HTTP 4xx
-- HTTP 5xx
-- Request headers
-- Response headers
-- Query parameters
-- Request body
-- Response body
-- Duration calculation
-
-### Storage
-
-- Save transaction
-- Retrieve transactions
-- Delete transactions
-- Maximum transaction limit
-- Clear all
-
-### Masking
-
-- Authorization header
-- Password field
-- Access token
-- Refresh token
-- Cookie
-
-### UI
-
-- Empty state
-- Request list
-- Request details
-- Search
-- Filtering
-- Clear history
-- Share action
-
----
-
-# 33. Empty State
+# 32. Empty State
 
 When no network activity has been captured:
 
@@ -967,7 +919,7 @@ will appear here.
 
 ---
 
-# 34. Important UX Principle
+# 33. Important UX Principle
 
 The tester should not need technical knowledge of Flutter.
 
@@ -989,7 +941,7 @@ Do not expose unnecessary implementation details.
 
 ---
 
-# 35. Initial Milestones
+# 34. Initial Milestones
 
 Implement in this order.
 
@@ -1090,7 +1042,7 @@ At this point the initial product should already solve the original problem.
 
 ---
 
-# 36. Definition of Done
+# 35. Definition of Done
 
 V1 is complete when a developer can:
 
@@ -1119,7 +1071,7 @@ V1 is complete when a developer can:
 
 If these requirements work reliably, **V1 is successful**.
 
-# 37. Development Rule for Codex
+# 36. Development Rule for Codex
 
 When implementing this project:
 
@@ -1134,7 +1086,6 @@ When implementing this project:
 - Use null safety.
 - Handle errors properly.
 - Keep UI and business logic separated.
-- Write tests for important functionality.
 - Document public APIs.
 
 ### Most important rule
