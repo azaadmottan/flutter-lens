@@ -325,6 +325,13 @@ final dio = Dio();
 dio.interceptors.add(FlutterLensDioInterceptor());
 ```
 
+For `package:http`:
+
+```dart
+final client = FlutterLensHttpClient();
+final response = await client.get(Uri.parse('https://api.example.com/profile'));
+```
+
 Other supported clients should have equally small integration APIs. The exact API can be improved during implementation, but a developer should not need to rewrite their networking layer.
 
 ---
