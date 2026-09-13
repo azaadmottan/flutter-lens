@@ -3,7 +3,14 @@ description: A local, in-app network inspector for Flutter test and release buil
 
 version: 0.1.0
 
-homepage: https://github.com/flutter-lens/flutter_lens
+homepage: https://github.com/azaadmottan/flutter-lens
+repository: https://github.com/azaadmottan/flutter-lens
+issue_tracker: https://github.com/azaadmottan/flutter-lens/issues
+topics:
+  - networking
+  - debugging
+  - http
+  - dio
 
 environment:
   sdk: ">=3.3.0 <4.0.0"
