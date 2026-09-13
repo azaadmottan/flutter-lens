@@ -11,6 +11,44 @@ final class _TransactionDetails extends StatelessWidget {
         child: Scaffold(
           appBar: AppBar(
             title: Text(_pathWithQuery(transaction.request.url), maxLines: 1, overflow: TextOverflow.ellipsis),
+            actions: [
+              PopupMenuButton<_TransactionAction>(
+                tooltip: 'Transaction actions',
+                icon: const Icon(Icons.more_vert),
+                onSelected: (action) => _handleAction(context, action),
+                itemBuilder: (context) => const [
+                  PopupMenuItem(
+                    value: _TransactionAction.copyUrl,
+                    child: ListTile(leading: Icon(Icons.link), title: Text('Copy URL')),
+                  ),
+                  PopupMenuItem(
+                    value: _TransactionAction.copyRequestBody,
+                    child: ListTile(leading: Icon(Icons.upload_outlined), title: Text('Copy request body')),
+                  ),
+                  PopupMenuItem(
+                    value: _TransactionAction.copyResponseBody,
+                    child: ListTile(leading: Icon(Icons.download_outlined), title: Text('Copy response body')),
+                  ),
+                  PopupMenuItem(
+                    value: _TransactionAction.copyHeaders,
+                    child: ListTile(leading: Icon(Icons.list_alt_outlined), title: Text('Copy headers')),
+                  ),
+                  PopupMenuItem(
+                    value: _TransactionAction.copyCurl,
+                    child: ListTile(leading: Icon(Icons.terminal_outlined), title: Text('Copy cURL')),
+                  ),
+                  PopupMenuDivider(),
+                  PopupMenuItem(
+                    value: _TransactionAction.copyReport,
+                    child: ListTile(leading: Icon(Icons.copy_all_outlined), title: Text('Copy debug report')),
+                  ),
+                  PopupMenuItem(
+                    value: _TransactionAction.shareReport,
+                    child: ListTile(leading: Icon(Icons.ios_share_outlined), title: Text('Share debug report')),
+                  ),
+                ],
+              ),
+            ],
             bottom: const TabBar(
               isScrollable: true,
               tabAlignment: TabAlignment.start,
@@ -32,6 +70,51 @@ final class _TransactionDetails extends StatelessWidget {
           ),
         ),
       );
+
+  Future<void> _handleAction(BuildContext context, _TransactionAction action) async {
+    final report = NetworkTransactionFormatter.debugReport(
+      transaction,
+      environment: FlutterLens.config.environment,
+    );
+    switch (action) {
+      case _TransactionAction.copyUrl:
+        await _copy(context, transaction.request.url.toString(), 'URL copied');
+      case _TransactionAction.copyRequestBody:
+        await _copy(context, NetworkTransactionFormatter.prettyValue(transaction.request.body), 'Request body copied');
+      case _TransactionAction.copyResponseBody:
+        await _copy(context, NetworkTransactionFormatter.prettyValue(transaction.response?.body), 'Response body copied');
+      case _TransactionAction.copyHeaders:
+        await _copy(
+          context,
+          'Request Headers\n${NetworkTransactionFormatter.prettyValue(transaction.request.headers)}\n\n'
+              'Response Headers\n${NetworkTransactionFormatter.prettyValue(transaction.response?.headers ?? const {})}',
+          'Headers copied',
+        );
+      case _TransactionAction.copyCurl:
+        await _copy(context, NetworkTransactionFormatter.curl(transaction), 'cURL copied');
+      case _TransactionAction.copyReport:
+        await _copy(context, report, 'Debug report copied');
+      case _TransactionAction.shareReport:
+        await FlutterLensShare.text(context, report, subject: 'FlutterLens Debug Report');
+    }
+  }
+
+  Future<void> _copy(BuildContext context, String text, String message) async {
+    await Clipboard.setData(ClipboardData(text: text));
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+    }
+  }
+}
+
+enum _TransactionAction {
+  copyUrl,
+  copyRequestBody,
+  copyResponseBody,
+  copyHeaders,
+  copyCurl,
+  copyReport,
+  shareReport,
 }
 
 final class _OverviewTab extends StatelessWidget {

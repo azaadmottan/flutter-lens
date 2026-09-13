@@ -36,20 +36,4 @@ String _timeLabel(DateTime timestamp) =>
 String _fullTimeLabel(DateTime timestamp) =>
     '${timestamp.day.toString().padLeft(2, '0')}/${timestamp.month.toString().padLeft(2, '0')}/${timestamp.year} ${_timeLabel(timestamp)}';
 
-String _prettyValue(Object? value) {
-  if (value == null) {
-    return '';
-  }
-  if (value is String) {
-    try {
-      return const JsonEncoder.withIndent('  ').convert(jsonDecode(value));
-    } on FormatException {
-      return value;
-    }
-  }
-  try {
-    return const JsonEncoder.withIndent('  ').convert(value);
-  } on JsonUnsupportedObjectError {
-    return value.toString();
-  }
-}
+String _prettyValue(Object? value) => value == null ? '' : NetworkTransactionFormatter.prettyValue(value);

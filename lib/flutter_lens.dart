@@ -11,5 +11,7 @@ export 'src/models/network_request.dart';
 export 'src/models/network_response.dart';
 export 'src/models/network_transaction.dart';
 export 'src/privacy/network_data_masker.dart';
+export 'src/sharing/flutter_lens_share.dart';
 export 'src/storage/local_network_storage.dart';
 export 'src/storage/network_storage.dart';
+export 'src/utilities/network_transaction_formatter.dart';

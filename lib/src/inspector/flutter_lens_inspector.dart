@@ -1,9 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../core/flutter_lens.dart';
 import '../models/network_transaction.dart';
+import '../sharing/flutter_lens_share.dart';
+import '../utilities/network_transaction_formatter.dart';
 
 part 'screens/transaction_details.dart';
 part 'utils/inspector_formatters.dart';

@@ -12,9 +12,10 @@ and duration directly in your app, without connecting to a development machine.
 - Restore local history with `shared_preferences` and limit retained transactions.
 - Mask configured headers and structured fields before recording new entries.
 - Open the inspector from your own button or developer menu.
+- Copy request details, a masked cURL command, or a full debug report.
+- Share a masked debug report through the native platform share sheet.
 
-FlutterLens has no backend, accounts, or cloud sync. Version 0.1.0 is an initial
-implementation; dedicated copy/share actions and cURL export are not implemented.
+FlutterLens has no backend, accounts, or cloud sync.
 
 ## Installation
 
@@ -121,9 +122,10 @@ FilledButton(
 ```
 
 The inspector includes history, search, All/Success/Errors filters, transaction
-details, and a clear-history action. Error filters currently follow captured
-client errors; an HTTP 4xx/5xx response from `package:http` alone is not classified
-as a client error.
+details, copy actions, native sharing, and a clear-history action. The transaction
+overflow menu can copy the URL, request/response body, combined headers, masked
+cURL command, or full debug report. **Share debug report** opens the native share
+sheet with the same masked report.
 
 See [the example](example/README.md) for a complete Flutter entry point that
 uses a mock HTTP response without contacting a server.

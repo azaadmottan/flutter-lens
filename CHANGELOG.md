@@ -11,3 +11,4 @@ Initial implementation, prepared for the first release.
 - Persist history locally using `shared_preferences` with configurable retention.
 - Mask configured sensitive headers and structured fields on new records.
 - Add package documentation, an example, Flutter CI, and Dependabot updates.
+- Add masked cURL and debug-report generation, clipboard actions, and native report sharing.
